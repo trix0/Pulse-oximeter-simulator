@@ -466,7 +466,8 @@ def main():
                     powerUp(bus,adapter,service_manager,ad_manager,agent,agent_manager,bleApp,advertisement)
                 
                 else:
-                    rt.run()
+                    rt = RepeatedTimer(1, tickData, myOximeterService)
+                    rt.start()
             else:
                 rt.stop()
                 logger.error("Power down !")
