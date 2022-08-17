@@ -466,7 +466,7 @@ def main():
                     powerUp(bus,adapter,service_manager,ad_manager,agent,agent_manager,bleApp,advertisement)
                 
                 else:
-                    rt = RepeatedTimer(1, tickData, myOximeterService)
+                    rt.run()
             else:
                 rt.stop()
                 logger.error("Power down !")
@@ -477,6 +477,7 @@ def main():
                 #powerDown(ad_manager,advertisement)
                 
         elif(commandType=="SetData"):
+            rt.run()
             logger.info("SetData")
             setData(myOximeterService,content['data'])
         return jsonify(content)
