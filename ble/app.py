@@ -478,7 +478,7 @@ def main():
                 #powerDown(ad_manager,advertisement)
                 
         elif(commandType=="SetData"):
-            rt.run()
+            rt.start()
             logger.info("SetData")
             setData(myOximeterService,content['data'])
         return jsonify(content)
