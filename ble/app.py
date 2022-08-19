@@ -350,7 +350,7 @@ class OximeterAdvertisment(Advertisement):
         )
         self.add_service_uuid(OximeterService.OximeterServiceUUID)
         self.add_local_name("Monin")
-        self.add_data(0x19,[0x0C,0x41])
+        self.add_data(0x19,[0xC,0x41])
         self.include_tx_power = True
 
 
