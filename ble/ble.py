@@ -256,6 +256,7 @@ class Advertisement(dbus.service.Object):
         self.ad_type = advertising_type
         self.service_uuids = None
         self.manufacturer_data = None
+        self.appearance= None
         self.solicit_uuids = None
         self.service_data = None
         self.local_name = None
@@ -266,6 +267,8 @@ class Advertisement(dbus.service.Object):
     def get_properties(self):
         properties = dict()
         properties["Type"] = self.ad_type
+        if self.appearance is not None:
+            properties["Appearance"] = dbus.UInt16(self.appearance)
         if self.service_uuids is not None:
             properties["ServiceUUIDs"] = dbus.Array(self.service_uuids, signature="s")
         if self.solicit_uuids is not None:
@@ -310,6 +313,10 @@ class Advertisement(dbus.service.Object):
             self.service_data = dbus.Dictionary({}, signature="sv")
         self.service_data[uuid] = dbus.Array(data, signature="y")
 
+    def add_appearance(self,appearance):
+        if not self.appearance:
+            self.appearance=0x00
+        self.appearance=dbus.UInt16(appearance)
     def add_local_name(self, name):
         if not self.local_name:
             self.local_name = ""
