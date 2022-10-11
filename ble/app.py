@@ -254,7 +254,7 @@ class ContiniousMeasurement(Characteristic):
     def changeValue(self,spo2,pulse):
         sfloatSpo2=sfloat.floatToSFloat(spo2*10)
         sfloatPulse=sfloat.floatToSFloat(pulse*10)
-        self.WriteValue(sfloatSpo2,sfloatPulse)
+        self.updateValue(sfloatSpo2,sfloatPulse)
 
 
     def ReadValue(self, options=None):
@@ -265,6 +265,20 @@ class ContiniousMeasurement(Characteristic):
         print('\tValue:', '\t', val_list)
         return val_list
 
+
+    def updateValue(self, spo2,pulse, options=None):
+        val_list = [dbus.Byte(0x1)]
+        spo2Value = []
+        for val in spo2:
+            spo2Value.append(dbus.Byte(val))
+        spo2Value=spo2Value[::-1]
+        pulseValue=[]
+        for val in pulse:
+           pulseValue.append(dbus.Byte(val))
+        pulseValue=pulseValue[::-1]
+        val_list=[dbus.Byte(0x1)]+spo2Value+pulseValue
+        print(bytes(val_list).hex())
+        self.value = val_list
 
     def WriteValue(self, spo2,pulse, options=None):
         val_list = [dbus.Byte(0x1)]
