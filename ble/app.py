@@ -53,6 +53,7 @@ filelogHandler.setFormatter(formatter)
 logger.addHandler(filelogHandler)
 logger.addHandler(logHandler)
 myOximeterService=None
+running=False
 
 host_name = "0.0.0.0"
 port = 5000
@@ -421,7 +422,6 @@ def setData(service,data):
 
 
 def main():
-    global running
     global mainloop
     dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
      # get the system bus
