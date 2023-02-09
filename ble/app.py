@@ -467,9 +467,11 @@ def main():
             if(value):
                 # Power up
                 logger.info("Powering up...")
+                global advertisement
                 advertisement = OximeterAdvertisment(bus, 0)
                 adapter_props = dbus.Interface(adapter_obj, "org.freedesktop.DBus.Properties")
                 adapter_props.Set("org.bluez.Adapter1", "Powered", dbus.Boolean(1))
+
                 global bleApp
                 global myOximeterService
                 global rt
