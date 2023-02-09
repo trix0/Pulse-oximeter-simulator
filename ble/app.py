@@ -466,7 +466,8 @@ def main():
                     logger.critical("GattManager1 interface not found")
                     return
                 adapter_obj = bus.get_object(BLUEZ_SERVICE_NAME, adapter)
-
+                adapter_props = dbus.Interface(adapter_obj, "org.freedesktop.DBus.Properties")
+                adapter_props.Set("org.bluez.Adapter1", "Powered", dbus.Boolean(1))
 
                 advertisement = OximeterAdvertisment(bus, 0)
                 # Get manager objs
@@ -476,8 +477,7 @@ def main():
                 obj = bus.get_object(BLUEZ_SERVICE_NAME, "/org/bluez")
                 agent_manager = dbus.Interface(obj, "org.bluez.AgentManager1")
 
-                adapter_props = dbus.Interface(adapter_obj, "org.freedesktop.DBus.Properties")
-                adapter_props.Set("org.bluez.Adapter1", "Powered", dbus.Boolean(1))
+
 
                 bleApp = Application(bus)
                 myOximeterService=OximeterService(bus, 2)
