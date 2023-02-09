@@ -49,7 +49,7 @@ class Application(dbus.service.Object):
         self.services = []
         self.bus= bus
         dbus.service.Object.__init__(self, bus, self.path)
-        
+
     def release(self):
         self.remove_from_connection()
 
@@ -104,6 +104,8 @@ class Service(dbus.service.Object):
 
 
     def release(self):
+        for child in  self.characteristics:
+            child.release()
         self.remove_from_connection()
 
     def get_properties(self):
@@ -154,6 +156,11 @@ class Characteristic(dbus.service.Object):
         self.value = [0]
         self.descriptors = []
         dbus.service.Object.__init__(self, bus, self.path)
+
+    def release(self):
+        for child in  self.descriptors:
+            child.release()
+        self.remove_from_connection()
 
     def get_properties(self):
         return {
@@ -225,6 +232,9 @@ class Descriptor(dbus.service.Object):
         self.chrc = characteristic
         dbus.service.Object.__init__(self, bus, self.path)
 
+    def release(self):
+        self.remove_from_connection()
+        
     def get_properties(self):
         return {
             GATT_DESC_IFACE: {

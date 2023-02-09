@@ -381,7 +381,7 @@ AGENT_PATH = "/com/trixo/oximeter"
 INITIALIZED = False
 
 def powerDown(bus, adapter, service_manager, ad_manager, agent, agent_manager, bleApp, advertisement):
-    bleApp.remove_from_connection()
+    #bleApp.remove_from_connection()
     #service_manager.remove_from_connection()
     #ad_manager.remove_from_connection()
     agent.remove_from_connection()
