@@ -374,7 +374,6 @@ def register_ad_cb():
 
 def register_ad_error_cb(error):
     logger.critical("Failed to register advertisement: " + str(error))
-    mainloop.quit()
 
 def unregister_ad_cb():
     logger.info("Advertisement unregistered")
@@ -382,7 +381,6 @@ def unregister_ad_cb():
 
 def unregister_ad_error_cb(error):
     logger.critical("Failed to unregister advertisement: " + str(error))
-    mainloop.quit()
 
 
 AGENT_PATH = "/com/trixo/oximeter"
@@ -505,7 +503,7 @@ def main():
                 adapter_props.Set("org.bluez.Adapter1", "Powered", dbus.Boolean(0))
                 powerDown(bus, adapter, service_manager, ad_manager, agent, agent_manager, bleApp, advertisement)
                 #agent.remove_from_connection()
-                advertisement.remove_from_connection()
+                #advertisement.remove_from_connection()
 
         elif(commandType=="ADVERTISMENT"):
             if(value):
