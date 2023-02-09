@@ -418,9 +418,10 @@ def setData(service,data):
     return
 
     
-running = False
+
 
 def main():
+    global running
     global mainloop
     dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
      # get the system bus
