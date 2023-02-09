@@ -458,6 +458,7 @@ def main():
     @app.route('/command', methods=['POST'])
     def data():
         content = request.json
+        global running
         commandType=content['type']
         value=content["value"]
         if(commandType=="POWER"):
