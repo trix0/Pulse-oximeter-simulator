@@ -496,7 +496,7 @@ def main():
                 bleApp.release()
                 agent_manager.UnregisterAgent(AGENT_PATH)
                 ad_manager.UnregisterAdvertisement(advertisement.get_path(),
-                                    reply_handler=unregister_ad_cb,
+                                    reply_handler=None,
                                     error_handler=unregister_ad_error_cb)
 
                 adapter_props = dbus.Interface(adapter_obj, "org.freedesktop.DBus.Properties")
