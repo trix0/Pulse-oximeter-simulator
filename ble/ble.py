@@ -47,9 +47,9 @@ class Application(dbus.service.Object):
     def __init__(self, bus):
         self.path = "/"
         self.services = []
+        self.bus= bus
         dbus.service.Object.__init__(self, bus, self.path)
 
-        
 
     def get_path(self):
         return dbus.ObjectPath(self.path)
@@ -99,6 +99,11 @@ class Service(dbus.service.Object):
         self.characteristics = []
         dbus.service.Object.__init__(self, bus, self.path)
 
+
+    def release(self):
+        self.remove_from_connection()
+        dbus.unregister_object_path(self.path)
+        
     def get_properties(self):
         return {
             GATT_SERVICE_IFACE: {

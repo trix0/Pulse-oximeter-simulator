@@ -486,6 +486,7 @@ def main():
             elif(~value):
                 # Power down
                 logger.info("Powering down...")
+                myOximeterService.release()
                 adapter_props = dbus.Interface(adapter_obj, "org.freedesktop.DBus.Properties")
                 adapter_props.Set("org.bluez.Adapter1", "Powered", dbus.Boolean(0))
                 powerDown(bus, adapter, service_manager, ad_manager, agent, agent_manager, bleApp, advertisement)
