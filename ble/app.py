@@ -424,6 +424,7 @@ def main():
     bus = dbus.SystemBus()
     # get the ble controller
     adapter = find_adapter(bus)
+    global running
     running = False
 
 
@@ -475,7 +476,7 @@ def main():
                 rt = RepeatedTimer(1, tickData, myOximeterService)
                 powerUp(bus,adapter,service_manager,ad_manager,agent,agent_manager,bleApp,advertisement)
                 rt.start()
-                running=True
+                running = True
 
 
             elif(~value):
