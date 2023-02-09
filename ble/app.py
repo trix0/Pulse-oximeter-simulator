@@ -380,17 +380,13 @@ def register_ad_error_cb(error):
 AGENT_PATH = "/com/trixo/oximeter"
 INITIALIZED = False
 
-def powerDown(bus,adapter,service_manager,ad_manager,agent,agent_manager,application,advertisement):
-    adapter_props = bus.get_object("org.bluez", adapter)
-    adapter_props.Set("org.bluez.Adapter1", "Powered", dbus.Boolean(0))
+def powerDown(bus, adapter, service_manager, ad_manager, agent, agent_manager, bleApp, advertisement):
     bleApp.remove_from_connection()
     service_manager.remove_from_connection()
     ad_manager.remove_from_connection()
     agent.remove_from_connection()
     agent_manager.remove_from_connection()
     advertisement.remove_from_connection()
-    return
-
 
 
 def powerUp(bus,adapter,service_manager,ad_manager,agent,agent_manager,application,advertisement):
@@ -489,9 +485,9 @@ def main():
             elif(~value):
                 # Power down
                 logger.info("Powering down...")
-                rt.stop()
-                powerDown(bus,adapter,service_manager,ad_manager,agent,agent_manager,bleApp,advertisement)
-
+                adapter_props = dbus.Interface(adapter_obj, "org.freedesktop.DBus.Properties")
+                adapter_props.Set("org.bluez.Adapter1", "Powered", dbus.Boolean(0))
+                powerDown(bus, adapter, service_manager, ad_manager, agent, agent_manager, bleApp, advertisement)
         elif(commandType=="ADVERTISMENT"):
             if(value):
                 # Advertisment start
