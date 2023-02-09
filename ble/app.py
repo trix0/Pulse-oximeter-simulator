@@ -384,7 +384,7 @@ def unregister_ad_error_cb(error):
 
 
 AGENT_PATH = "/com/trixo/oximeter"
-RUNNING = False
+
 
 def powerUp(bus,adapter,service_manager,ad_manager,agent,agent_manager,application,advertisement):
     agent_manager.RegisterAgent(AGENT_PATH, "NoInputNoOutput")
@@ -403,7 +403,6 @@ def powerUp(bus,adapter,service_manager,ad_manager,agent,agent_manager,applicati
         reply_handler=register_app_cb,
         error_handler=[register_app_error_cb],
     )
-
     agent_manager.RequestDefaultAgent(AGENT_PATH)
     RUNNING = True
     return
@@ -425,7 +424,7 @@ def main():
     bus = dbus.SystemBus()
     # get the ble controller
     adapter = find_adapter(bus)
-
+    running = False
 
 
     if not adapter:
@@ -446,9 +445,9 @@ def main():
     @app.route('/status', methods=['GET'])
     def status():
         response={
-            "running": RUNNING,
+            "running": running,
         }
-        if(RUNNING):
+        if(running):
             response["data"] = myOximeterService.value
         return jsonify(response)
 
@@ -476,7 +475,7 @@ def main():
                 rt = RepeatedTimer(1, tickData, myOximeterService)
                 powerUp(bus,adapter,service_manager,ad_manager,agent,agent_manager,bleApp,advertisement)
                 rt.start()
-                RUNNING=True
+                running=True
 
 
             elif(~value):
@@ -491,7 +490,7 @@ def main():
                 service_manager.UnregisterApplication(bleApp.get_path())
                 bleApp.release()
                 rt.stop()
-                RUNNING=False
+                running=False
 
         elif(commandType=="ADVERTISMENT"):
             if(value):
