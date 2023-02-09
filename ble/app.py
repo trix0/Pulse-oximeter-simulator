@@ -417,6 +417,9 @@ def setData(service,data):
     service.ContiniousMeasurementChartacteristic.changeValue(data['spO2'],data['pulse'])
     return
 
+    
+running = False
+
 def main():
     global mainloop
     dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
@@ -424,8 +427,6 @@ def main():
     bus = dbus.SystemBus()
     # get the ble controller
     adapter = find_adapter(bus)
-    global running
-    running = False
 
 
     if not adapter:
@@ -476,8 +477,8 @@ def main():
                 rt = RepeatedTimer(1, tickData, myOximeterService)
                 powerUp(bus,adapter,service_manager,ad_manager,agent,agent_manager,bleApp,advertisement)
                 rt.start()
+                global running
                 running = True
-                logger.info("running" + running)
 
 
             elif(~value):
@@ -492,7 +493,8 @@ def main():
                 service_manager.UnregisterApplication(bleApp.get_path())
                 bleApp.release()
                 rt.stop()
-                running=False
+                global running
+                running = False
 
         elif(commandType=="ADVERTISMENT"):
             if(value):
