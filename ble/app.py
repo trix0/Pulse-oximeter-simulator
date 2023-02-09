@@ -385,7 +385,7 @@ def powerDown(bus, adapter, service_manager, ad_manager, agent, agent_manager, b
     #service_manager.remove_from_connection()
     #ad_manager.remove_from_connection()
     agent.remove_from_connection()
-    agent_manager.remove_from_connection()
+    #agent_manager.remove_from_connection()
     advertisement.remove_from_connection()
 
 
