@@ -477,6 +477,7 @@ def main():
                 powerUp(bus,adapter,service_manager,ad_manager,agent,agent_manager,bleApp,advertisement)
                 rt.start()
                 running = True
+                logger.info("running" + running)
 
 
             elif(~value):
