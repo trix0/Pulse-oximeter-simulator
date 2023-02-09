@@ -444,7 +444,7 @@ def main():
     mainloop = MainLoop()
 
     @app.route('/status', methods=['GET'])
-    def data():
+    def status():
         response={
             "running": RUNNING,
         }
