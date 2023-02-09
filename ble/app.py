@@ -414,6 +414,7 @@ def powerUp(bus,adapter,service_manager,ad_manager,agent,agent_manager,applicati
     )
 
     agent_manager.RequestDefaultAgent(AGENT_PATH)
+    INITIALIZED = False
     return
     
 def setPower(data):
@@ -441,15 +442,20 @@ def main():
     adapter = find_adapter(bus)
 
 
-    global advertisement
-    global service_manager
-    global ad_manager
-    global agent
-    global agent_manager
-    global bleApp
-    global myOximeterService
-    global rt
 
+    if not adapter:
+        logger.critical("GattManager1 interface not found")
+        return
+    adapter_obj = bus.get_object(BLUEZ_SERVICE_NAME, adapter)
+
+
+    advertisement = OximeterAdvertisment(bus, 0)
+    # Get manager objs
+    service_manager = dbus.Interface(adapter_obj, GATT_MANAGER_IFACE)
+    ad_manager = dbus.Interface(adapter_obj, LE_ADVERTISING_MANAGER_IFACE)
+    agent = Agent(bus, AGENT_PATH)
+    obj = bus.get_object(BLUEZ_SERVICE_NAME, "/org/bluez")
+    agent_manager = dbus.Interface(obj, "org.bluez.AgentManager1")
     mainloop = MainLoop()
 
     @app.route('/command', methods=['POST'])
@@ -461,23 +467,11 @@ def main():
             if(value):
                 # Power up
                 logger.info("Powering up...")
-
-                if not adapter:
-                    logger.critical("GattManager1 interface not found")
-                    return
-                adapter_obj = bus.get_object(BLUEZ_SERVICE_NAME, adapter)
                 adapter_props = dbus.Interface(adapter_obj, "org.freedesktop.DBus.Properties")
                 adapter_props.Set("org.bluez.Adapter1", "Powered", dbus.Boolean(1))
-
-                advertisement = OximeterAdvertisment(bus, 0)
-                # Get manager objs
-                service_manager = dbus.Interface(adapter_obj, GATT_MANAGER_IFACE)
-                ad_manager = dbus.Interface(adapter_obj, LE_ADVERTISING_MANAGER_IFACE)
-                agent = Agent(bus, AGENT_PATH)
-                obj = bus.get_object(BLUEZ_SERVICE_NAME, "/org/bluez")
-                agent_manager = dbus.Interface(obj, "org.bluez.AgentManager1")
-
-
+                global bleApp
+                global myOximeterService
+                global rt
 
                 bleApp = Application(bus)
                 myOximeterService=OximeterService(bus, 2)
@@ -491,7 +485,6 @@ def main():
             elif(~value):
                 # Power down
                 logger.info("Powering down...")
-                rt.stop()
                 myOximeterService.release()
 
                 agent_manager.UnregisterAgent(AGENT_PATH)
@@ -502,6 +495,7 @@ def main():
                 powerDown(bus, adapter, service_manager, ad_manager, agent, agent_manager, bleApp, advertisement)
                 service_manager.UnregisterApplication(bleApp.get_path())
                 bleApp.release()
+                rt.stop()
                 #agent.remove_from_connection()
                 #advertisement.remove_from_connection()
 
