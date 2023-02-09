@@ -381,10 +381,14 @@ AGENT_PATH = "/com/trixo/oximeter"
 INITIALIZED = False
 
 def powerDown(bus,adapter,service_manager,ad_manager,agent,agent_manager,application,advertisement):
-    ad_manager.UnregisterAdvertisement(advertisement)
-    agent_manager.UnregisterAgent(agent)
-    service_manager.UnregisterApplication(application)
-    dbus.service.Object.remove_from_connection(advertisement)
+    adapter_props = bus.get_object("org.bluez", adapter)
+    adapter_props.Set("org.bluez.Adapter1", "Powered", dbus.Boolean(0))
+    bleApp.remove_from_connection()
+    service_manager.remove_from_connection()
+    ad_manager.remove_from_connection()
+    agent.remove_from_connection()
+    agent_manager.remove_from_connection()
+    advertisement.remove_from_connection()
     return
 
 
@@ -459,7 +463,7 @@ def main():
     def data():
         content = request.json
         commandType=content['type']
-        value=content["data"]["value"]
+        value=content["value"]
         if(commandType=="POWER"):
             if(value):
                 # Power up
@@ -485,6 +489,9 @@ def main():
             elif(~value):
                 # Power down
                 logger.info("Powering down...")
+                rt.stop()
+                powerDown(bus,adapter,service_manager,ad_manager,agent,agent_manager,bleApp,advertisement)
+
         elif(commandType=="ADVERTISMENT"):
             if(value):
                 # Advertisment start
