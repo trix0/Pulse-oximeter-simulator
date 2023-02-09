@@ -223,6 +223,8 @@ class ContiniousMeasurement(Characteristic):
         self.notifying = False
         self.status = []
         self.value = [0]
+        self.spo2=0
+        self.pulse=0
         self.add_descriptor(CharacteristicUserDescriptionDescriptor(bus, 1, self))
 
     def StartNotify(self):
@@ -253,6 +255,8 @@ class ContiniousMeasurement(Characteristic):
 
 
     def changeValue(self,spo2,pulse):
+        self.spo2=spo2
+        self.pulse=pulse
         sfloatSpo2=sfloat.floatToSFloat(spo2*10)
         sfloatPulse=sfloat.floatToSFloat(pulse*10)
         self.updateValue(sfloatSpo2,sfloatPulse)
@@ -451,7 +455,7 @@ def main():
             "running": running,
         }
         if(running):
-            response["data"] = myOximeterService.ContiniousMeasurementChartacteristic.value
+            response["data"] = {"spO2":myOximeterService.ContiniousMeasurementChartacteristic.spo2,"pulse":myOximeterService.ContiniousMeasurementChartacteristic.pulse}
         return jsonify(response)
 
 
