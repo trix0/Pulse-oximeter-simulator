@@ -464,6 +464,7 @@ def main():
             if(value):
                 # Power up
                 logger.info("Powering up...")
+                adapter_props = dbus.Interface(adapter_obj, "org.freedesktop.DBus.Properties")
                 adapter_props.Set("org.bluez.Adapter1", "Powered", dbus.Boolean(1))
                 if(INITIALIZED==False):
                     global bleApp
