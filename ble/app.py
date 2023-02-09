@@ -492,6 +492,7 @@ def main():
 
                 agent_manager.UnregisterAgent(AGENT_PATH)
                 ad_manager.UnregisterAdvertisement(advertisement.get_path())
+                advertisement.release()
 
                 adapter_props = dbus.Interface(adapter_obj, "org.freedesktop.DBus.Properties")
                 adapter_props.Set("org.bluez.Adapter1", "Powered", dbus.Boolean(0))

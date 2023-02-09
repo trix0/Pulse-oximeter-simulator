@@ -234,7 +234,7 @@ class Descriptor(dbus.service.Object):
 
     def release(self):
         self.remove_from_connection()
-        
+
     def get_properties(self):
         return {
             GATT_DESC_IFACE: {
@@ -281,6 +281,9 @@ class Advertisement(dbus.service.Object):
         self.data = None
         dbus.service.Object.__init__(self, bus, self.path)
 
+    def release(self):
+        self.remove_from_connection()
+        
     def get_properties(self):
         properties = dict()
         properties["Type"] = self.ad_type
