@@ -384,16 +384,7 @@ def unregister_ad_error_cb(error):
 
 
 AGENT_PATH = "/com/trixo/oximeter"
-INITIALIZED = False
-
-# def powerDown(bus, adapter, service_manager, ad_manager, agent, agent_manager, bleApp, advertisement):
-#     #bleApp.remove_from_connection()
-#     #service_manager.remove_from_connection()
-#     #ad_manager.remove_from_connection()
-#     #agent.remove_from_connection()
-#     #agent_manager.remove_from_connection()
-#     #advertisement.remove_from_connection()
-
+RUNNING = False
 
 def powerUp(bus,adapter,service_manager,ad_manager,agent,agent_manager,application,advertisement):
     agent_manager.RegisterAgent(AGENT_PATH, "NoInputNoOutput")
@@ -414,15 +405,9 @@ def powerUp(bus,adapter,service_manager,ad_manager,agent,agent_manager,applicati
     )
 
     agent_manager.RequestDefaultAgent(AGENT_PATH)
-    INITIALIZED = False
+    RUNNING = True
     return
     
-def setPower(data):
-    value=data["value"]
-    if(value):
-        powerUp()
-    else:
-        powerDown()
 
 def tickData(service):
     service.ContiniousMeasurementChartacteristic.Tick()
@@ -430,7 +415,7 @@ def tickData(service):
 
 
 def setData(service,data):
-    service.ContiniousMeasurementChartacteristic.changeValue(data['spo2'],data['pulse'])
+    service.ContiniousMeasurementChartacteristic.changeValue(data['spO2'],data['pulse'])
     return
 
 def main():
@@ -458,6 +443,15 @@ def main():
     agent_manager = dbus.Interface(obj, "org.bluez.AgentManager1")
     mainloop = MainLoop()
 
+    @app.route('/status', methods=['GET'])
+    def data():
+        response = {
+            "running": RUNNING,
+            "data":myOximeterService.value
+        }
+        return jsonify(response)
+
+
     @app.route('/command', methods=['POST'])
     def data():
         content = request.json
@@ -468,40 +462,35 @@ def main():
                 # Power up
                 logger.info("Powering up...")
                 global advertisement
-                advertisement = OximeterAdvertisment(bus, 0)
-                adapter_props = dbus.Interface(adapter_obj, "org.freedesktop.DBus.Properties")
-                adapter_props.Set("org.bluez.Adapter1", "Powered", dbus.Boolean(1))
-
                 global bleApp
                 global myOximeterService
                 global rt
 
+                advertisement = OximeterAdvertisment(bus, 0)
+                adapter_props = dbus.Interface(adapter_obj, "org.freedesktop.DBus.Properties")
+                adapter_props.Set("org.bluez.Adapter1", "Powered", dbus.Boolean(1))
                 bleApp = Application(bus)
                 myOximeterService=OximeterService(bus, 2)
                 bleApp.add_service(myOximeterService)
-
                 rt = RepeatedTimer(1, tickData, myOximeterService)
                 powerUp(bus,adapter,service_manager,ad_manager,agent,agent_manager,bleApp,advertisement)
                 rt.start()
+                RUNNING=True
 
 
             elif(~value):
                 # Power down
                 logger.info("Powering down...")
                 myOximeterService.release()
-
                 agent_manager.UnregisterAgent(AGENT_PATH)
                 ad_manager.UnregisterAdvertisement(advertisement.get_path())
                 advertisement.release()
-
                 adapter_props = dbus.Interface(adapter_obj, "org.freedesktop.DBus.Properties")
                 adapter_props.Set("org.bluez.Adapter1", "Powered", dbus.Boolean(0))
-                #powerDown(bus, adapter, service_manager, ad_manager, agent, agent_manager, bleApp, advertisement)
                 service_manager.UnregisterApplication(bleApp.get_path())
                 bleApp.release()
                 rt.stop()
-                #agent.remove_from_connection()
-                #advertisement.remove_from_connection()
+                RUNNING=False
 
         elif(commandType=="ADVERTISMENT"):
             if(value):
@@ -511,63 +500,11 @@ def main():
                 # Advertistment stop
                 logger.info("Advertisment stop...")
         elif(commandType=="DATA"):
-            if(value):
-                # Advertisment start
-                logger.info("Advertisment start...")
-            elif(~value):
-                # Advertistment stop
-                logger.info("Advertisment stop...")
+            setData(myOximeterService,content['value'])
         else:
             return "Bad request", 400
 
         return jsonify(content)
-
-
-    # @app.route('/command', methods=['POST'])
-    # def data():
-    #     content = request.json
-    #     logger.error("data")
-    #     logger.error(content['data'])
-    #     commandType=content['type']
-    #     logger.error("commandType")
-    #     logger.error(commandType)
-    #     if(commandType=="Power"):
-    #         value=content["data"]["value"]
-    #         if(value):
-    #             logger.error("Power up !")
-    #             adapter_props.Set("org.bluez.Adapter1", "Powered", dbus.Boolean(1))
-    #             if(INITIALIZED==False):
-    #                 global bleApp
-    #                 global myOximeterService
-    #                 global rt
-
-    #                 bleApp = Application(bus)
-    #                 myOximeterService=OximeterService(bus, 2)
-    #                 bleApp.add_service(myOximeterService)
-
-    #                 rt = RepeatedTimer(1, tickData, myOximeterService)
-    #                 powerUp(bus,adapter,service_manager,ad_manager,agent,agent_manager,bleApp,advertisement)
-                
-    #             else:
-    #                 rt = RepeatedTimer(1, tickData, myOximeterService)
-    #                 rt.start()
-    #         else:
-    #             rt.stop()
-    #             logger.error("Power down !")
-    #             #powerDown(bus,adapter,service_manager,ad_manager,agent,agent_manager,bleApp,advertisement)
-    #             adapter_props.Set("org.bluez.Adapter1", "Powered", dbus.Boolean(0))
-    #             #bleApp.remove_from_connection()
-    #             #myOximeterService.remove_from_connection()
-    #             #powerDown(ad_manager,advertisement)
-                
-    #     elif(commandType=="SetData"):
-    #         rt.start()
-    #         logger.info("SetData")
-    #         setData(myOximeterService,content['data'])
-    #     return jsonify(content)
-
-
-
     mainloop.run()
 
 
