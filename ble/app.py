@@ -493,14 +493,15 @@ def main():
                 # Power down
                 logger.info("Powering down...")
                 myOximeterService.release()
-                bleApp.release()
+
                 agent_manager.UnregisterAgent(AGENT_PATH)
                 ad_manager.UnregisterAdvertisement(advertisement.get_path())
 
                 adapter_props = dbus.Interface(adapter_obj, "org.freedesktop.DBus.Properties")
                 adapter_props.Set("org.bluez.Adapter1", "Powered", dbus.Boolean(0))
                 powerDown(bus, adapter, service_manager, ad_manager, agent, agent_manager, bleApp, advertisement)
-                service_manager.UnregisterApplication()
+                service_manager.UnregisterApplication(bleApp.get_path())
+                bleApp.release()
                 #agent.remove_from_connection()
                 #advertisement.remove_from_connection()
 
