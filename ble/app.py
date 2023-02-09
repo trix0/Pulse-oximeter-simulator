@@ -445,10 +445,11 @@ def main():
 
     @app.route('/status', methods=['GET'])
     def data():
-        response = {
+        response={
             "running": RUNNING,
-            "data":myOximeterService.value
         }
+        if(RUNNING):
+            response["data"] = myOximeterService.value
         return jsonify(response)
 
 
