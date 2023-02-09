@@ -414,7 +414,7 @@ def powerUp(bus,adapter,service_manager,ad_manager,agent,agent_manager,applicati
     )
 
     agent_manager.RequestDefaultAgent(AGENT_PATH)
-    INITIALIZED = True
+    INITIALIZED = False
     return
     
 def setPower(data):
