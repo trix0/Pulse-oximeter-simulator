@@ -451,7 +451,7 @@ def main():
             "running": running,
         }
         if(running):
-            response["data"] = myOximeterService.value
+            response["data"] = myOximeterService.ContiniousMeasurementChartacteristic.value
         return jsonify(response)
 
 
