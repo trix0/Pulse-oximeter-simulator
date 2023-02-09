@@ -449,7 +449,7 @@ def main():
     adapter_obj = bus.get_object(BLUEZ_SERVICE_NAME, adapter)
 
 
-    advertisement = OximeterAdvertisment(bus, 0)
+
     # Get manager objs
     service_manager = dbus.Interface(adapter_obj, GATT_MANAGER_IFACE)
     ad_manager = dbus.Interface(adapter_obj, LE_ADVERTISING_MANAGER_IFACE)
@@ -467,6 +467,7 @@ def main():
             if(value):
                 # Power up
                 logger.info("Powering up...")
+                advertisement = OximeterAdvertisment(bus, 0)
                 adapter_props = dbus.Interface(adapter_obj, "org.freedesktop.DBus.Properties")
                 adapter_props.Set("org.bluez.Adapter1", "Powered", dbus.Boolean(1))
                 global bleApp
