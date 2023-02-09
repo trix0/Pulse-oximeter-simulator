@@ -478,7 +478,6 @@ def main():
                 rt = RepeatedTimer(1, tickData, myOximeterService)
                 powerUp(bus,adapter,service_manager,ad_manager,agent,agent_manager,bleApp,advertisement)
                 rt.start()
-                global running
                 running = True
 
 
@@ -494,7 +493,6 @@ def main():
                 service_manager.UnregisterApplication(bleApp.get_path())
                 bleApp.release()
                 rt.stop()
-                global running
                 running = False
 
         elif(commandType=="ADVERTISMENT"):
