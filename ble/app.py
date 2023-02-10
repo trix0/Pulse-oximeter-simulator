@@ -475,6 +475,9 @@ def main():
             if(value):
                 # Power up
                 logger.info("Powering up...")
+
+                if(running):
+                    return "Already running", 200
                 global advertisement
                 global bleApp
                 global myOximeterService
@@ -495,6 +498,9 @@ def main():
             elif(~value):
                 # Power down
                 logger.info("Powering down...")
+
+                if(not running):
+                    return "Already off", 200
                 myOximeterService.release()
                 agent_manager.UnregisterAgent(AGENT_PATH)
                 ad_manager.UnregisterAdvertisement(advertisement.get_path())
