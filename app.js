@@ -26,7 +26,7 @@ app.post('/oximeterValues', function (request, response) {
 
 });
 app.post('/oximeterState', function (request, response) {
-  let body={"value":request.body,"type":"POWER"};
+  let body={...request.body,"type":"POWER"};
   sendCommand(body);
 });
 
