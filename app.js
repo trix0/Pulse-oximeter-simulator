@@ -31,13 +31,14 @@ app.post('/oximeterState', function (request, response) {
 });
 
 const sendCommand=(body)=>{
+  console.log(body);
   request({
     url: 'http://localhost:5000/command',
     method: "POST",
     json: true,  
     body: body
   }, function (error, response, body) {
-    console.log(response);
+    //console.log(response);
   });
-  response.send(req.body);    // echo the result back
+  //response.send(req.body);    // echo the result back
 }
