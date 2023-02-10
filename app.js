@@ -19,14 +19,14 @@ app.get('/', (req, res) => {
 })
 
 app.post('/oximeterValues', function (request, response) {
-  let body={"data":request.body,"type":"SetData"};
+  let body={"value":request.body,"type":"DATA"};
   sendCommand(body);
   response.send(body);    // echo the result back
 
 
 });
 app.post('/oximeterState', function (request, response) {
-  let body={"data":request.body,"type":"Power"};
+  let body={"value":request.body,"type":"POWER"};
   sendCommand(body);
 });
 

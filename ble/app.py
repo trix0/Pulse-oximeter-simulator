@@ -455,7 +455,10 @@ def main():
             "running": running,
         }
         if(running):
-            response["data"] = {"spO2":myOximeterService.ContiniousMeasurementChartacteristic.spo2,"pulse":myOximeterService.ContiniousMeasurementChartacteristic.pulse}
+            response["data"] = {
+                "spO2":myOximeterService.ContiniousMeasurementChartacteristic.spo2,
+                "pulse":myOximeterService.ContiniousMeasurementChartacteristic.pulse
+                }
         return jsonify(response)
 
 
