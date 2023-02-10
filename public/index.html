@@ -121,7 +121,7 @@
 		var xhttp=new XMLHttpRequest();
 		xhttp.open("POST", MYURL+"/oximeterValues");
 		xhttp.setRequestHeader("Content-type", "application/json");
-		var data=JSON.stringify({"pulse":pulse,"spo2":spo2});
+		var data=JSON.stringify({"pulse":pulse,"spO2":spo2});
 		xhttp.send(data);
 	}
 	function sendOximeterRunningData(isRunning){
