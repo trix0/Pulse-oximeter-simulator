@@ -419,7 +419,7 @@ def tickData(service):
 
 
 def setData(service,data):
-    if(data==None):
+    if(data==None or data['spO2']==None or data['pulse']==None):
         service.ContiniousMeasurementChartacteristic.changeValue(0,0)    
         return
     service.ContiniousMeasurementChartacteristic.changeValue(data['spO2'],data['pulse'])
