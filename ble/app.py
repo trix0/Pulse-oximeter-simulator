@@ -511,6 +511,8 @@ def main():
                 # Advertistment stop
                 logger.info("Advertisment stop...")
         elif(commandType=="DATA"):
+            if(not running):
+                return "Monin is not running", 404  
             setData(myOximeterService,content['value'])
         else:
             return "Bad request", 400
