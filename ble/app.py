@@ -473,7 +473,7 @@ def main():
     def status():
         response={
             "running": running,
-            "connectedDevices":list_devices()
+            "devices":list_devices()
         }
         if(running):
             response["data"] = {
