@@ -427,7 +427,6 @@ def setData(service,data):
     service.ContiniousMeasurementChartacteristic.changeValue(data['spO2'],data['pulse'])
     return
 
-    
 def get_ip_addresses():
     ip_addresses = {}
     for interface, addrs in psutil.net_if_addrs().items():
@@ -440,6 +439,7 @@ def get_ip_addresses():
             "addresses": interface_addresses
         }
     return json.dumps(ip_addresses)
+
 
 def main():
     global mainloop
@@ -467,7 +467,9 @@ def main():
 
     @app.route('/ip', methods=['GET'])
     def getIp(): 
-        return jsonify(get_ip_addresses())
+        try:
+            return jsonify(get_ip_addresses())
+        except Exception as e: return e
 
     @app.route('/status', methods=['GET'])
     def status():
