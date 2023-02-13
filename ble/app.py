@@ -2,7 +2,7 @@
 from email.mime import application
 from flask import Flask, request, jsonify
 
-
+import socket  
 import math
 import sfloat
 import sys
@@ -451,6 +451,15 @@ def main():
     obj = bus.get_object(BLUEZ_SERVICE_NAME, "/org/bluez")
     agent_manager = dbus.Interface(obj, "org.bluez.AgentManager1")
     mainloop = MainLoop()
+
+    @app.route('/ip', methods=['GET'])
+    def getIp():
+        hostname=socket.gethostname()   
+        iPAddr=socket.gethostbyname(hostname)   
+        response={
+            "ip": iPAddr,
+        }
+        return jsonify(response)
 
     @app.route('/status', methods=['GET'])
     def status():
