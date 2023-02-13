@@ -48,7 +48,7 @@ def list_devices():
     for path, interfaces in objects.items():
         device = interfaces.get("org.bluez.Device1")
         if device is not None:
-            devices.append((path, device))
+            devices.append(device)
 
     return devices
 

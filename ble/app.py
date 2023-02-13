@@ -472,10 +472,10 @@ def main():
     @app.route('/status', methods=['GET'])
     def status():
         response={
-            "running": running,
-            "devices":list_devices()
+            "running": running
         }
         if(running):
+            response["devices"]=list_devices()
             response["data"] = {
                 "spO2":myOximeterService.ContiniousMeasurementChartacteristic.spo2,
                 "pulse":myOximeterService.ContiniousMeasurementChartacteristic.pulse
