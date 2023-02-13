@@ -467,9 +467,7 @@ def main():
 
     @app.route('/ip', methods=['GET'])
     def getIp(): 
-        try:
-            return jsonify(get_ip_addresses())
-        except Exception as e: return e
+        return get_ip_addresses()
 
     @app.route('/status', methods=['GET'])
     def status():
