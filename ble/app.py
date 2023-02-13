@@ -23,6 +23,7 @@ from ble import (
     GATT_CHRC_IFACE,
     Application,
     find_adapter,
+    list_devices,
     Descriptor,
     Agent,
 )
@@ -472,6 +473,7 @@ def main():
     def status():
         response={
             "running": running,
+            "connectedDevices":list_devices()
         }
         if(running):
             response["data"] = {

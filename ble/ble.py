@@ -39,6 +39,19 @@ def find_adapter(bus):
 
     return None
 
+def list_devices():
+    bus = dbus.SystemBus()
+    manager = dbus.Interface(bus.get_object(BLUEZ_SERVICE_NAME, "/"), DBUS_OM_IFACE)
+    objects = manager.GetManagedObjects()
+
+    devices = []
+    for path, interfaces in objects.items():
+        device = interfaces.get("org.bluez.Device1")
+        if device is not None:
+            devices.append((path, device))
+
+    return devices
+
 class Application(dbus.service.Object):
     """
     org.bluez.GattApplication1 interface implementation
