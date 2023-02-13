@@ -467,7 +467,7 @@ def main():
 
     @app.route('/ip', methods=['GET'])
     def getIp(): 
-        return get_ip_addresses()
+        return jsonify(get_ip_addresses())
 
     @app.route('/status', methods=['GET'])
     def status():
