@@ -237,7 +237,6 @@ class ContiniousMeasurement(Characteristic):
             print('Notify Started')
             self.notifying = True
             self.ReadValue()
-            self.changeValue(100,75)
             self.status.append('notify')
 
         except Exception as e:
