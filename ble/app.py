@@ -2,7 +2,9 @@
 from email.mime import application
 from flask import Flask, request, jsonify
 
-import socket  
+import psutil
+import socket
+import json 
 import math
 import sfloat
 import sys
@@ -426,7 +428,18 @@ def setData(service,data):
     return
 
     
-
+def get_ip_addresses():
+    ip_addresses = {}
+    for interface, addrs in psutil.net_if_addrs().items():
+        interface_addresses = []
+        for addr in addrs:
+            if addr.family == socket.AF_INET:
+                interface_addresses.append(addr.address)
+        ip_addresses[interface] = {
+            "type": "eth" if "eth" in interface else "wlan" if "wlan" in interface else "lo",
+            "addresses": interface_addresses
+        }
+    return json.dumps(ip_addresses)
 
 def main():
     global mainloop
@@ -453,13 +466,8 @@ def main():
     mainloop = MainLoop()
 
     @app.route('/ip', methods=['GET'])
-    def getIp():
-        hostname=socket.gethostname()   
-        iPAddr=socket.gethostbyname(hostname)   
-        response={
-            "ip": iPAddr,
-        }
-        return jsonify(response)
+    def getIp(): 
+        return get_ip_addresses()
 
     @app.route('/status', methods=['GET'])
     def status():
