@@ -450,7 +450,7 @@ def main():
     bus = dbus.SystemBus()
     # get the ble controller
     adapter = find_adapter(bus)
-    device_path = device_path = find_devicePath(bus, adapter_obj)
+    device_path = find_devicePath(bus, adapter)
     device_obj = bus.get_object("org.bluez", device_path)
     device_iface = dbus.Interface(device_obj , "org.bluez.Device1")
     device_iface.SetMTU(23)
