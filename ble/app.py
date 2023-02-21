@@ -542,7 +542,8 @@ def main():
                 logger.info("Advertisment start...")
             elif(~value):
                 # Advertistment stop
-                ad_manager.StopAdvertising()
+                adapter_props = dbus.Interface(adapter_obj, "org.freedesktop.DBus.Properties")
+                adapter_props.Set("org.bluez.Adapter1", "Powered", dbus.Boolean(0))
                 logger.info("Advertisment stop...")
         elif(commandType=="DATA"):
             if(not running):
