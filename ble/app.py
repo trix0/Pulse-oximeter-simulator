@@ -289,6 +289,9 @@ class ContiniousMeasurement(Characteristic):
         self.value = val_list
 
     def WriteValue(self, spo2,pulse, options=None):
+        if options is not None:
+            # Set the desired options
+            options = dbus.Dictionary({'mtu': dbus.UInt16(23)}, signature='sv')
         val_list = [dbus.Byte(0x02)]
         spo2Value = []
         for val in spo2:
@@ -302,7 +305,11 @@ class ContiniousMeasurement(Characteristic):
         print(bytes(val_list).hex())
         self.value = val_list
         print('New value:', '\t', self.value)
-        self.PropertiesChanged(GATT_CHRC_IFACE, {'Value': self.value}, [])
+        if options is not None:
+            # Use the options in the PropertiesChanged signal
+            self.PropertiesChanged(GATT_CHRC_IFACE, {'Value': self.value}, options)
+        else:
+            self.PropertiesChanged(GATT_CHRC_IFACE, {'Value': self.value}, [])
         self.status.append('write')
 
 class SpotCheck(Characteristic):
