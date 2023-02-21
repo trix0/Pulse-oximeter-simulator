@@ -222,9 +222,8 @@ class ContiniousMeasurement(Characteristic):
 
     def __init__(self, bus, index, service):
         Characteristic.__init__(
-            self, bus, index, self.uuid, ["notify"], service,
+            self, bus, index, self.uuid, ["notify"], service,23
         )
-        self.SetMTU(23)
         self.notifying = False
         self.status = []
         self.value = [0]
@@ -312,7 +311,7 @@ class SpotCheck(Characteristic):
 
     def __init__(self, bus, index, service):
         Characteristic.__init__(
-            self, bus, index, self.uuid, ["indicate"], service,
+            self, bus, index, self.uuid, ["indicate"], service,64
         )
 
         self.value = [31]
@@ -329,7 +328,7 @@ class PlxFeatures(Characteristic):
     description = b"PlxFeatures"
     def __init__(self, bus, index, service):
         Characteristic.__init__(
-            self, bus, index, self.uuid, ["read"], service,
+            self, bus, index, self.uuid, ["read"], service,64
         )
 
         self.value = [31]
@@ -450,10 +449,6 @@ def main():
     bus = dbus.SystemBus()
     # get the ble controller
     adapter = find_adapter(bus)
-    device_path = find_devicePath(bus, adapter)
-    device_obj = bus.get_object("org.bluez", device_path)
-    device_iface = dbus.Interface(device_obj , "org.bluez.Device1")
-    device_iface.SetMTU(23)
     if not adapter:
         logger.critical("GattManager1 interface not found")
         return
