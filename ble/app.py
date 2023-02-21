@@ -254,6 +254,7 @@ class ContiniousMeasurement(Characteristic):
     def Tick(self):
         self.PropertiesChanged(GATT_CHRC_IFACE, {'Value': self.value}, self.options)
         self.status.append('write')
+        return self.notifying
 
 
 
