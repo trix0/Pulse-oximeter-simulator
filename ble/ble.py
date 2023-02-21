@@ -176,7 +176,7 @@ class Characteristic(dbus.service.Object):
         self.path = service.path + "/char" + str(index)
         self.bus = bus
         self.uuid = uuid
-        self.mtu=mtu
+        self.MTU=mtu
         self.service = service
         self.flags = flags
         self.value = [0]

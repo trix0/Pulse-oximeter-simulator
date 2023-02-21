@@ -222,7 +222,7 @@ class ContiniousMeasurement(Characteristic):
 
     def __init__(self, bus, index, service):
         Characteristic.__init__(
-            self, bus, index, self.uuid, ["notify"], service,23
+            self, bus, index, self.uuid, ["notify"], service, dbus.UInt16(23)
         )
         self.notifying = False
         self.status = []
