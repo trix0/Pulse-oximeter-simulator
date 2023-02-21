@@ -185,6 +185,11 @@ class Characteristic(dbus.service.Object):
             }
         }
 
+    @dbus.service.method(GATT_CHRC_IFACE, in_signature="q")
+    def SetMTU(self, mtu):
+        logger.info("MTU set to %d", mtu)
+        self.mtu = mtu
+        
     def get_path(self):
         return dbus.ObjectPath(self.path)
 

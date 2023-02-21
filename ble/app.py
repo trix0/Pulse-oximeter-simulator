@@ -223,6 +223,7 @@ class ContiniousMeasurement(Characteristic):
         Characteristic.__init__(
             self, bus, index, self.uuid, ["notify"], service,
         )
+        self.SetMTU(23)
         self.notifying = False
         self.status = []
         self.value = [0]
