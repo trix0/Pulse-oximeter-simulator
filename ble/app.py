@@ -533,9 +533,16 @@ def main():
         elif(commandType=="ADVERTISMENT"):
             if(value):
                 # Advertisment start
+                # ad_manager.RegisterAdvertisement(
+                #     advertisement.get_path(),
+                #     {},
+                #     reply_handler=register_ad_cb,
+                #     error_handler=register_ad_error_cb,
+                # )
                 logger.info("Advertisment start...")
             elif(~value):
                 # Advertistment stop
+                ad_manager.StopAdvertising()
                 logger.info("Advertisment stop...")
         elif(commandType=="DATA"):
             if(not running):
