@@ -6,7 +6,7 @@ import sys
 
 DBUS_OM_IFACE = "org.freedesktop.DBus.ObjectManager"
 DBUS_PROP_IFACE = "org.freedesktop.DBus.Properties"
-
+DEVICE_IFACE = "org.bluez.Device1"
 GATT_SERVICE_IFACE = "org.bluez.GattService1"
 GATT_CHRC_IFACE = "org.bluez.GattCharacteristic1"
 GATT_DESC_IFACE = "org.bluez.GattDescriptor1"
@@ -38,14 +38,15 @@ def find_adapter(bus):
             return o
 
     return None
-def find_devicePath(adapter):
-
-    #Returns the path of the first device object found that has a Device1 interface
-    remote_om = dbus.Interface(adapter.bus.get_object(BLUEZ_SERVICE_NAME, "/"), DBUS_OM_IFACE)
+def find_devicePath(bus, adapter_obj):
+    """
+    Returns the device path for a given adapter object
+    """
+    remote_om = dbus.Interface(bus.get_object(BLUEZ_SERVICE_NAME, "/"), DBUS_OM_IFACE)
     objects = remote_om.GetManagedObjects()
 
     for o, props in objects.items():
-        if DEVICE_IFACE in props.keys():
+        if DEVICE_IFACE in props.keys() and props[DEVICE_IFACE].get("Adapter") == adapter_obj:
             return o
 
     return None
