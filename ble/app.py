@@ -507,7 +507,7 @@ def main():
                 bleApp = Application(bus)
                 myOximeterService=OximeterService(bus, 2)
                 bleApp.add_service(myOximeterService)
-                rt = RepeatedTimer(3, tickData, myOximeterService)
+                rt = RepeatedTimer(1, tickData, myOximeterService)
                 powerUp(bus,adapter,service_manager,ad_manager,agent,agent_manager,bleApp,advertisement)
                 rt.start()
                 running = True
