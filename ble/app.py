@@ -274,7 +274,7 @@ class ContiniousMeasurement(Characteristic):
 
 
     def updateValue(self, spo2,pulse, options=None):
-        val_list = [dbus.Byte(0x1)]
+        val_list = [dbus.Byte(0x02)]
         spo2Value = []
         for val in spo2:
             spo2Value.append(dbus.Byte(val))
@@ -283,12 +283,12 @@ class ContiniousMeasurement(Characteristic):
         for val in pulse:
            pulseValue.append(dbus.Byte(val))
         pulseValue=pulseValue[::-1]
-        val_list=[dbus.Byte(0x1)]+spo2Value+pulseValue
+        val_list=[dbus.Byte(0x02)]+spo2Value+pulseValue
         print(bytes(val_list).hex())
         self.value = val_list
 
     def WriteValue(self, spo2,pulse, options=None):
-        val_list = [dbus.Byte(0x1)]
+        val_list = [dbus.Byte(0x02)]
         spo2Value = []
         for val in spo2:
             spo2Value.append(dbus.Byte(val))
@@ -297,7 +297,7 @@ class ContiniousMeasurement(Characteristic):
         for val in pulse:
            pulseValue.append(dbus.Byte(val))
         pulseValue=pulseValue[::-1]
-        val_list=[dbus.Byte(0x1)]+spo2Value+pulseValue
+        val_list=[dbus.Byte(0x02)]+spo2Value+pulseValue
         print(bytes(val_list).hex())
         self.value = val_list
         print('New value:', '\t', self.value)
