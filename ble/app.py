@@ -507,7 +507,7 @@ def main():
                 bleApp = Application(bus)
                 myOximeterService=OximeterService(bus, 2)
                 bleApp.add_service(myOximeterService)
-                rt = RepeatedTimer(2, tickData, myOximeterService)
+                rt = RepeatedTimer(5, tickData, myOximeterService)
                 powerUp(bus,adapter,service_manager,ad_manager,agent,agent_manager,bleApp,advertisement)
                 rt.start()
                 running = True
@@ -542,7 +542,7 @@ def main():
                 logger.info("Advertisment start...")
             elif(~value):
                 # Advertistment stop
-                ad_manager.UnregisterAdvertisement(advertisement.get_path())
+                #ad_manager.UnregisterAdvertisement(advertisement.get_path())
                 logger.info("Advertisment stop...")
         elif(commandType=="DATA"):
             if(not running):
