@@ -222,7 +222,7 @@ class ContiniousMeasurement(Characteristic):
 
     def __init__(self, bus, index, service):
         Characteristic.__init__(
-            self, bus, index, self.uuid, ["notify"], service, dbus.UInt16(23)
+            self, bus, index, self.uuid, ["notify"], service, dbus.Dictionary({'mtu': dbus.UInt16(27)}, signature='sv')
         )
         self.notifying = False
         self.status = []
@@ -252,11 +252,7 @@ class ContiniousMeasurement(Characteristic):
         print('\nNotify Stopped')
 
     def Tick(self):
-        if self.options is not None:
-            # Use the options in the PropertiesChanged signal
-            self.PropertiesChanged(GATT_CHRC_IFACE, {'Value': self.value}, self.options)
-        else:
-            self.PropertiesChanged(GATT_CHRC_IFACE, {'Value': self.value}, [])
+        self.PropertiesChanged(GATT_CHRC_IFACE, {'Value': self.value}, self.options)
         self.status.append('write')
 
 
@@ -295,7 +291,7 @@ class ContiniousMeasurement(Characteristic):
     def WriteValue(self, spo2,pulse, options=None):
         if options is not None:
             # Set the desired options
-            options = dbus.Dictionary({'mtu': dbus.UInt16(23)}, signature='sv')
+            self.options = options
         val_list = [dbus.Byte(0x02)]
         spo2Value = []
         for val in spo2:

@@ -172,11 +172,11 @@ class Characteristic(dbus.service.Object):
     org.bluez.GattCharacteristic1 interface implementation
     """
 
-    def __init__(self, bus, index, uuid, flags, service,mtu):
+    def __init__(self, bus, index, uuid, flags, service,options):
         self.path = service.path + "/char" + str(index)
         self.bus = bus
         self.uuid = uuid
-        self.MTU=mtu
+        self.options=options
         self.service = service
         self.flags = flags
         self.value = [0]
