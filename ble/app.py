@@ -252,7 +252,11 @@ class ContiniousMeasurement(Characteristic):
         print('\nNotify Stopped')
 
     def Tick(self):
-        self.PropertiesChanged(GATT_CHRC_IFACE, {'Value': self.value}, [])
+        if self.options is not None:
+            # Use the options in the PropertiesChanged signal
+            self.PropertiesChanged(GATT_CHRC_IFACE, {'Value': self.value}, self.options)
+        else:
+            self.PropertiesChanged(GATT_CHRC_IFACE, {'Value': self.value}, [])
         self.status.append('write')
 
 
