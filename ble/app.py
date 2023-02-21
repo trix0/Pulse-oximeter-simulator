@@ -23,6 +23,7 @@ from ble import (
     GATT_CHRC_IFACE,
     Application,
     find_adapter,
+    find_devicePath,
     list_devices,
     Descriptor,
     Agent,
@@ -449,8 +450,10 @@ def main():
     bus = dbus.SystemBus()
     # get the ble controller
     adapter = find_adapter(bus)
-
-
+    device_path = find_devicePath(adapter)
+    device_obj = bus.get_object("org.bluez", device_path)
+    device_iface = dbus.Interface(device_obj , "org.bluez.Device1")
+    device_iface.SetMTU(23)
     if not adapter:
         logger.critical("GattManager1 interface not found")
         return

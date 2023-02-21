@@ -38,6 +38,17 @@ def find_adapter(bus):
             return o
 
     return None
+def find_devicePath(adapter):
+
+    #Returns the path of the first device object found that has a Device1 interface
+    remote_om = dbus.Interface(adapter.bus.get_object(BLUEZ_SERVICE_NAME, "/"), DBUS_OM_IFACE)
+    objects = remote_om.GetManagedObjects()
+
+    for o, props in objects.items():
+        if DEVICE_IFACE in props.keys():
+            return o
+
+    return None
 
 def list_devices():
     bus = dbus.SystemBus()
